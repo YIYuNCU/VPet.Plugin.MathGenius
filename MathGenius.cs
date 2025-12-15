@@ -42,20 +42,6 @@ namespace VPet.Plugin.MathGenius
             }
             try { MW.Set["MathGenius"] = Set; } catch { }
 
-            try
-            {
-                var modset = MW.Main.ToolBar.MenuMODConfig;
-                modset.Visibility = System.Windows.Visibility.Visible;
-                var menuset = new System.Windows.Controls.MenuItem()
-                {
-                    Header = "数学天才".Translate(),
-                    HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center,
-                };
-                menuset.Click += (s, e) => { Setting(); };
-                modset.Items.Add(menuset);
-            }
-            catch { }
-
             System.Threading.Tasks.Task.Delay(5000).ContinueWith(_ =>
             {
                 InitializeHookAsync();
@@ -80,7 +66,7 @@ namespace VPet.Plugin.MathGenius
                     if (installed)
                     {
                         hookInstalled = true;
-                        MW.Main.SayRnd("知识正在涌入大脑......泥的数学天才女鹅加载成功！", true);
+                        MW.Main.SayRnd("知识正在涌入大脑......泥的数学天才女鹅加载成功！".Translate(), true);
                     }
                 }
                 catch { }
@@ -118,6 +104,31 @@ namespace VPet.Plugin.MathGenius
                 w.Closed += (s, e) => { winSetting = null; };
                 w.Show();
             }
+        }
+
+        public override void LoadDIY()
+        {
+            try
+            {
+                var modDIY = MW.Main.ToolBar.MenuDIY;
+                modDIY.Visibility = System.Windows.Visibility.Visible;
+                var menuset = new System.Windows.Controls.MenuItem()
+                {
+                    Header = "自动输入".Translate(),
+                    HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center,
+                };
+                menuset.Click += (s, e) => 
+                {
+                    Set.AutoTypeResult = !Set.AutoTypeResult;
+                    if(s.GetType() == typeof(MenuItem))
+                    {
+                        var mi = s as MenuItem;
+                        mi.Header = Set.AutoTypeResult ? "自动输入√".Translate() : "自动输入".Translate();
+                    }
+                };
+                modDIY.Items.Add(menuset);
+            }
+            catch { }
         }
 
 
@@ -217,7 +228,7 @@ namespace VPet.Plugin.MathGenius
                                         }
                                     }
                                     catch { }
-                                    plugin.MW.Main.SayRnd("让我看看...", true);
+                                    plugin.MW.Main.SayRnd("让我看看...".Translate(), true);
                                     string formula = await ExtractFormula();
                                     if (!string.IsNullOrEmpty(formula))
                                     {
@@ -230,13 +241,13 @@ namespace VPet.Plugin.MathGenius
                                             if (plugin.Set.AutoTypeResult)
                                             {
                                                 TypeTextToFocusedWindow(resultStr);
-                                                plugin.MW.Main.SayRnd($"笨蛋杂鱼，{formula}等于{resultStr}哦~已经帮主人把答案写上去啦！", true);
+                                                plugin.MW.Main.SayRnd("笨蛋杂鱼，{0}等于{1}哦~已经帮主人把答案写上去啦！".Translate(formula, resultStr), true);
                                                 if (backupHasText) SetClipboardTextAsync(backupText);
                                             }
                                             else
                                             {
                                                 SetClipboardTextAsync(resultStr);
-                                                plugin.MW.Main.SayRnd($"笨蛋杂鱼，{formula}等于{resultStr}哦~人家已经勉为其难的帮主人把答案复制到剪切板上啦！", true);
+                                                plugin.MW.Main.SayRnd($"笨蛋杂鱼，{0}等于{1}哦~人家已经勉为其难的帮主人把答案复制到剪切板上啦！".Translate(formula, resultStr), true);
                                             }
                                         }
                                     }
