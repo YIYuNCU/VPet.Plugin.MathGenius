@@ -348,9 +348,22 @@ namespace VPet.Plugin.MathGenius
                     }
                     else if (wMsg == WM_KEYDOWN || wMsg == WM_SYSKEYDOWN)
                     {
-                        if ((vkCode >= 0x30 && vkCode <= 0x39) || (vkCode >= 0x60 && vkCode <= 0x69))
+                        if (vkCode == VK_EQUAL)
                         {
-                            hasDigitTyped = true;
+                            // plugin.MW.Main.SayRnd("等号键被按下".Translate(), true);
+                        }
+                        else
+                        {
+                            if ((vkCode >= 0x30 && vkCode <= 0x39) || (vkCode >= 0x60 && vkCode <= 0x69))
+                            {
+                                // plugin.MW.Main.SayRnd("hasDigitTyped：true".Translate(), true);
+                                hasDigitTyped = true;
+                            }
+                            else
+                            {
+                                // plugin.MW.Main.SayRnd("hasDigitTyped：false".Translate(), true);
+                                hasDigitTyped = false;
+                            }
                         }
                     }
                 }
