@@ -247,7 +247,7 @@ namespace VPet.Plugin.MathGenius
         private Dispatcher dispatcher;
         private MathGeniusPlugin plugin;
         private int keyPressCount = 0;
-        private bool hasDigitTyped = false;
+        private int hasDigitTyped = 0;
 
         private void Log(string message) { }
 
@@ -296,9 +296,9 @@ namespace VPet.Plugin.MathGenius
                     if (vkCode == VK_EQUAL && (wMsg == WM_KEYUP || wMsg == WM_SYSKEYUP))
                     {
                         bool shiftDown = IsShiftDown();
-                        if (!shiftDown && hasDigitTyped)
+                        if (!shiftDown && hasDigitTyped > 1)
                         {
-                            hasDigitTyped = false;
+                            hasDigitTyped = 0;
                             isProcessing = true;
                             Task.Run(async () =>
                             {
@@ -357,12 +357,12 @@ namespace VPet.Plugin.MathGenius
                             if ((vkCode >= 0x30 && vkCode <= 0x39) || (vkCode >= 0x60 && vkCode <= 0x69))
                             {
                                 // plugin.MW.Main.SayRnd("hasDigitTyped：true".Translate(), true);
-                                hasDigitTyped = true;
+                                hasDigitTyped ++;
                             }
                             else
                             {
                                 // plugin.MW.Main.SayRnd("hasDigitTyped：false".Translate(), true);
-                                hasDigitTyped = false;
+                                hasDigitTyped = 0;
                             }
                         }
                     }
